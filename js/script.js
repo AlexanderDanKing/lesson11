@@ -89,7 +89,7 @@ window.addEventListener("DOMContentLoaded", () => {
     let more = document.querySelectorAll(".more, .description-btn"),
         overlay = document.querySelector(".overlay"),
         close = document.querySelector(".popup-close");
-        console.log(more);
+       
         
     more.forEach((item) => {
         item.addEventListener("click", () => {
@@ -126,6 +126,7 @@ window.addEventListener("DOMContentLoaded", () => {
     form.addEventListener("submit", (event) => {
         event.preventDefault();
         form.appendChild(statusMessage);
+        
 
         let request = new XMLHttpRequest();
         request.open("POST", "server.php");
@@ -140,8 +141,9 @@ window.addEventListener("DOMContentLoaded", () => {
         let json = JSON.stringify(obj);
 
         request.send(json);
-
+        
         request.addEventListener("readystatechange", () => {
+          
             if (request.readyState < 4){
                 statusMessage.innerHTML = message.loading;
             } else if(request.readyState === 4 && request.status == 200){
@@ -150,16 +152,24 @@ window.addEventListener("DOMContentLoaded", () => {
                 statusMessage.innerHTML = message.failure;
             }
         });
-
+        
+        
             for (let i = 0; i < input.length; i++){
                 input[i].value = "";
             }
+
+            close.addEventListener("click", () => {
+                if(form.contains(statusMessage)){
+                    form.removeChild(statusMessage);
+                }
+            });
     }); 
+    
 }
     callBackForm('.main-form');
     callBackForm('#form');
 
-    function phoneNumber(event) {
+    function phoneNumber() {
         let placeholder = "+7 (___) ___ __ __",
         i = 0,
         def = placeholder.replace(/\D/g, ""),
@@ -174,6 +184,9 @@ window.addEventListener("DOMContentLoaded", () => {
         });
 
        }
-       let input = document.querySelector("#phone");
-       input.addEventListener("input", phoneNumber);
+       let input = document.querySelectorAll(".phone-number");
+       input.forEach((item) => {
+            item.addEventListener("input", phoneNumber);
+       });
+      
 });
